@@ -209,6 +209,7 @@ set(LLVM_ALL_TARGETS
   CppBackend
   Hexagon
   Mips
+  Mos6502
   MSP430
   NVPTX
   PowerPC
