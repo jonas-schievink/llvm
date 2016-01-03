@@ -17,7 +17,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Immediate value
-def MEMimm : Operand<i8> {
+def ZeroPage : Operand<i8> {
   let MIOperandInfo = (ops i8imm);
 }
 
@@ -59,10 +59,10 @@ class GroupOneInstr<bits<3> op,
 /// 8 addressing modes (as shown above) and I selects the instruction. The 3 I
 /// bits are passed as the `enc` parameter.
 multiclass GroupOne<string opstrn, bits<3> enc, dag pat> {
-  def imm : GroupOneInstr<enc, 0b010, (outs Acc:$acc),
-                          (ins i8imm:$imm),
-                          !strconcat(opstrn, " #$imm"),
-                          [pat]>;
+  def imm : GroupOneInstr<enc, 0b010, (outs Acc:$acc), (ins i8imm:$mem),
+                          !strconcat(opstrn, " #$mem"), [pat]>;
+  def zero : GroupOneInstr<enc, 0b001, (outs Acc:$acc), (ins ZeroPage:$mem),
+                          !strconcat(opstrn, " $mem"), [pat]>;
 }
 
-defm LDA : GroupOne<"lda", 0b000 /*FIXME*/, (set i8:$acc, (load i8:$imm))>;
+defm LDA : GroupOne<"lda", 0b000 /*FIXME*/, (set i8:$acc, (load i8:$mem))>;

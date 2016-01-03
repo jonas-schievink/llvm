@@ -1,4 +1,4 @@
-//===-- Mos6502InstPrinter.cpp - Convert Mos6502 MCInst to asm syntax -------------===//
+//===-- Mos6502InstPrinter.cpp - Convert Mos6502 MCInst to asm syntax -----===//
 //
 //                     The LLVM Compiler Infrastructure
 //
@@ -76,13 +76,4 @@ void Mos6502InstPrinter::printMemOperand(const MCInst *MI, int OpNo, raw_ostream
   // register
   assert(RegOp.isReg() && "Register operand not a register");
   O << '(' << getRegisterName(RegOp.getReg()) << ')';
-}
-
-void Mos6502InstPrinter::printImm64Operand(const MCInst *MI, unsigned OpNo,
-                                       raw_ostream &O) {
-  const MCOperand &Op = MI->getOperand(OpNo);
-  if (Op.isImm())
-    O << (uint64_t)Op.getImm();
-  else
-    O << Op;
 }

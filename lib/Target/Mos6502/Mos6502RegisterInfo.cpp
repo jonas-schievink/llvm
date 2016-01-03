@@ -58,8 +58,6 @@ void Mos6502RegisterInfo::eliminateFrameIndex(MachineBasicBlock::iterator II,
 
   unsigned FrameReg = getFrameRegister(MF);
   int FrameIndex = MI.getOperand(i).getIndex();
-  const TargetInstrInfo &TII = *MF.getSubtarget().getInstrInfo();
-  MachineBasicBlock &MBB = *MI.getParent();
 
   int Offset = MF.getFrameInfo()->getObjectOffset(FrameIndex) +
                MI.getOperand(i + 1).getImm();

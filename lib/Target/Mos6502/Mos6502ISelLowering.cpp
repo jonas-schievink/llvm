@@ -196,7 +196,6 @@ SDValue Mos6502TargetLowering::LowerFormalArguments(
   }
 
   MachineFunction &MF = DAG.getMachineFunction();
-  MachineRegisterInfo &RegInfo = MF.getRegInfo();
 
   // Assign locations to all of the incoming arguments.
   SmallVector<CCValAssign, 16> ArgLocs;

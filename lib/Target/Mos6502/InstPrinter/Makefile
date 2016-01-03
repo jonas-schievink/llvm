@@ -1,4 +1,4 @@
-##===- lib/Target/Mos6502/InstPrinter/Makefile -----------------*- Makefile -*-===##
+##===- lib/Target/Mos6502/InstPrinter/Makefile -------------*- Makefile -*-===##
 #
 #                     The LLVM Compiler Infrastructure
 #

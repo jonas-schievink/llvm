@@ -25,10 +25,6 @@ extern "C" void LLVMInitializeMos6502Target() {
   RegisterTargetMachine<Mos6502TargetMachine> Z(TheMos6502Target);
 }
 
-static std::string computeDataLayout(const Triple &TT) {
-  return "e-p:16:8";
-}
-
 Mos6502TargetMachine::Mos6502TargetMachine(const Target &T, const Triple &TT,
                                    StringRef CPU, StringRef FS,
                                    const TargetOptions &Options,

@@ -116,8 +116,6 @@ bool Mos6502DAGToDAGISel::SelectFIAddr(SDValue Addr, SDValue &Base, SDValue &Off
 }
 
 SDNode *Mos6502DAGToDAGISel::Select(SDNode *Node) {
-  unsigned Opcode = Node->getOpcode();
-
   // Dump information about the Node being selected
   DEBUG(dbgs() << "Selecting: "; Node->dump(CurDAG); dbgs() << '\n');
 
