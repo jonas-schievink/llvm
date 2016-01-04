@@ -13,7 +13,8 @@
 
 #include "Mos6502.h"
 #include "Mos6502TargetMachine.h"
-#include "llvm/CodeGen/TargetLoweringObjectFileImpl.h"
+#include "Mos6502TargetObjectFile.h"
+//#include "llvm/CodeGen/TargetLoweringObjectFileImpl.h"
 #include "llvm/IR/LegacyPassManager.h"
 #include "llvm/CodeGen/Passes.h"
 #include "llvm/Support/FormattedStream.h"
@@ -31,7 +32,7 @@ Mos6502TargetMachine::Mos6502TargetMachine(const Target &T, const Triple &TT,
                                    Reloc::Model RM, CodeModel::Model CM,
                                    CodeGenOpt::Level OL)
     : LLVMTargetMachine(T, "e-p:16:8", TT, CPU, FS, Options, RM, CM, OL),
-      TLOF(make_unique<TargetLoweringObjectFileELF>()),
+      TLOF(make_unique<Mos6502TargetObjectFile>()),
       Subtarget(TT, CPU, FS, *this) {
   initAsmInfo();
 }

@@ -16,6 +16,7 @@
 #include "Mos6502.h"
 #include "Mos6502TargetMachine.h"
 #include "Mos6502Subtarget.h"
+#include "Mos6502TargetObjectFile.h"
 #include "llvm/CodeGen/CallingConvLower.h"
 #include "llvm/CodeGen/MachineFrameInfo.h"
 #include "llvm/CodeGen/MachineFunction.h"
@@ -89,7 +90,7 @@ int DiagnosticInfoUnsupported::KindID = 0;
 }
 
 Mos6502TargetLowering::Mos6502TargetLowering(const TargetMachine &TM,
-                                     const Mos6502Subtarget &STI)
+                                             const Mos6502Subtarget &STI)
     : TargetLowering(TM) {
 
   // Set up the register classes.
