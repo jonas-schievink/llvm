@@ -1,4 +1,4 @@
-//===-- Mos6502InstPrinter.h - Convert Mos6502 MCInst to asm syntax -------*- C++ -*--//
+//===-- Mos6502InstPrinter.h - Convert Mos6502 MCInst to asm ----*- C++ -*-===//
 //
 //                     The LLVM Compiler Infrastructure
 //

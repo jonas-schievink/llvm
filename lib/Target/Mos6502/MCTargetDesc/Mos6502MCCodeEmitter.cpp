@@ -1,4 +1,4 @@
-//===-- Mos6502MCCodeEmitter.cpp - Convert Mos6502 code to machine code -----------===//
+//===-- Mos6502MCCodeEmitter.cpp - Convert Mos6502 code to machine code ---===//
 //
 //                     The LLVM Compiler Infrastructure
 //

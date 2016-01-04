@@ -30,9 +30,15 @@ public:
     CommentString = ";";
     HasDotTypeDotSizeDirective = false;
     GlobalDirective = ".global ";
+    HasSingleParameterDotFile = false;
+    PointerSize = 2;
 
     // FIXME: ca65 uses ".segment" while LLVM wants to use ".section"
     // (it also uses ".code" while LLVM uses ".text")
+  }
+
+  bool shouldOmitSectionDirective(StringRef SectionName) const override {
+    return false;
   }
 };
 } // end namespace llvm
