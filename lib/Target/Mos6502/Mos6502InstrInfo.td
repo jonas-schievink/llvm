@@ -17,9 +17,12 @@
 //===----------------------------------------------------------------------===//
 
 /// Immediate value
+// FIXME what...
 def ZeroPage : Operand<i8> {
   let MIOperandInfo = (ops i8imm);
 }
+
+def jmptarget : Operand<OtherVT>;
 
 //===----------------------------------------------------------------------===//
 // Abstract instruction classes and encoding
@@ -50,6 +53,34 @@ class GroupOneInstr<bits<3> op,
   let Inst{0-1} = 0b01;
 }
 
+class GroupThreeInstr<bits<6> op,
+                      dag outs,
+                      dag ins,
+                      string fmt,
+                      list<dag> pattern>
+                      : Mos6502Instr<outs, ins, fmt, pattern> {
+  let Inst{7-2} = op;
+  let Inst{0-1} = 0b00;
+}
+
+/// Class for conditional and unconditional branches. All branches and jumps are
+/// group one instructions.
+class Branch<bits<6> op,
+             dag ins,
+             string fmt,
+             list<dag> pat> : GroupThreeInstr<op, (outs), ins, fmt, pat> {
+  let isBranch = 1;     // Well, Duh
+  let isTerminator = 1; // Branches terminate basic blocks
+  let hasDelaySlot = 1; // FIXME No idea, do we even have delay slots?
+}
+
+/// We only have 2 unconditional branches `jmp a` (absolute addressing), and
+/// `jmp (a)` (absolute indirect).
+class UncondBranch<bits<6> op, list<dag> pat>
+    : Branch<op,(ins jmptarget:$addr), "jmp $addr", pat> {
+  let isBarrier = 1;    // Control flow can't fall through uncond. branches
+}
+
 /// Define a "Group One" opcode supporting the 8 addressing modes
 /// Indexed Indirect (0b000), Zero Page (0b001), Immediate (0b010),
 /// Absolute (0b011), Indirect Indexed (0b100), Zero Page Indexed by X (0b101),
@@ -61,8 +92,11 @@ class GroupOneInstr<bits<3> op,
 multiclass GroupOne<string opstrn, bits<3> enc, dag pat> {
   def imm : GroupOneInstr<enc, 0b010, (outs Acc:$acc), (ins i8imm:$mem),
                           !strconcat(opstrn, " #$mem"), [pat]>;
-  def zero : GroupOneInstr<enc, 0b001, (outs Acc:$acc), (ins ZeroPage:$mem),
-                          !strconcat(opstrn, " $mem"), [pat]>;
+  def zp : GroupOneInstr<enc, 0b001, (outs Acc:$acc), (ins ZeroPage:$mem),
+                         !strconcat(opstrn, " $mem"), [pat]>;
 }
 
 defm LDA : GroupOne<"lda", 0b000 /*FIXME*/, (set i8:$acc, (load i8:$mem))>;
+
+def JMP : UncondBranch<0b000000 /*FIXME*/, [(br bb:$addr)]>;
+// FIXME: JMP with abs. ind. addressing
