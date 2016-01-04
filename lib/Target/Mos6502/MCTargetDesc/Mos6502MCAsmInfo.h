@@ -27,6 +27,12 @@ public:
   explicit Mos6502MCAsmInfo(const Triple &TT) {
     SupportsDebugInformation = false;
     ExceptionsType = ExceptionHandling::None;
+    CommentString = ";";
+    HasDotTypeDotSizeDirective = false;
+    GlobalDirective = ".global ";
+
+    // FIXME: ca65 uses ".segment" while LLVM wants to use ".section"
+    // (it also uses ".code" while LLVM uses ".text")
   }
 };
 } // end namespace llvm
