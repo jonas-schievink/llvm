@@ -11,16 +11,14 @@
 //
 //===----------------------------------------------------------------------===//
 
+// FIXME: Instruction encoding is not yet specified
 
 //===----------------------------------------------------------------------===//
 // Operands
 //===----------------------------------------------------------------------===//
 
-/// Immediate value
-// FIXME what...
-def ZeroPage : Operand<i8> {
-  let MIOperandInfo = (ops i8imm);
-}
+// FIXME: i don't even know
+def mem : Operand<iPTR>;
 
 def jmptarget : Operand<OtherVT>;
 
@@ -71,13 +69,12 @@ class Branch<bits<6> op,
              list<dag> pat> : GroupThreeInstr<op, (outs), ins, fmt, pat> {
   let isBranch = 1;     // Well, Duh
   let isTerminator = 1; // Branches terminate basic blocks
-  let hasDelaySlot = 1; // FIXME No idea, do we even have delay slots?
 }
 
-/// We only have 2 unconditional branches `jmp a` (absolute addressing), and
+/// We only have 2 unconditional branches: `jmp a` (absolute addressing), and
 /// `jmp (a)` (absolute indirect).
 class UncondBranch<bits<6> op, list<dag> pat>
-    : Branch<op,(ins jmptarget:$addr), "jmp $addr", pat> {
+    : Branch<op, (ins jmptarget:$addr), "jmp $addr", pat> {
   let isBarrier = 1;    // Control flow can't fall through uncond. branches
 }
 
@@ -92,11 +89,20 @@ class UncondBranch<bits<6> op, list<dag> pat>
 multiclass GroupOne<string opstrn, bits<3> enc, dag pat> {
   def imm : GroupOneInstr<enc, 0b010, (outs Acc:$acc), (ins i8imm:$mem),
                           !strconcat(opstrn, " #$mem"), [pat]>;
-  def zp : GroupOneInstr<enc, 0b001, (outs Acc:$acc), (ins ZeroPage:$mem),
-                         !strconcat(opstrn, " $mem"), [pat]>;
+//  def zp  : GroupOneInstr<enc, 0b001, (outs Acc:$acc), (ins ZeroPage:$mem),
+//                          !strconcat(opstrn, " $mem"), [pat]>;
+//  def abs : GroupOneInstr<enc, 0b001, (outs Acc:$acc), (ins ZeroPage:$mem),
+//                          !strconcat(opstrn, " $mem"), [pat]>;
 }
 
-defm LDA : GroupOne<"lda", 0b000 /*FIXME*/, (set i8:$acc, (load i8:$mem))>;
+// FIXME: let isMoveImm = 1 (?)
+defm LDA : GroupOne<"lda", 0b000, (set i8:$acc, (load i8:$mem))>;
 
-def JMP : UncondBranch<0b000000 /*FIXME*/, [(br bb:$addr)]>;
-// FIXME: JMP with abs. ind. addressing
+// FIXME Need distinct regclasses for X and Y?
+//def TAX : GroupThreeInstr<0b000000, (outs Index:$x), (ins Acc:$acc),
+//                          "tax", [(set i8:$x, Acc:$acc)]>;
+
+def JMP : UncondBranch<0b000000, [(br bb:$addr)]>;
+
+def LDAabs : GroupOneInstr<0, 0, (outs Acc:$acc), (ins mem:$abs),
+                           "lda $abs", [(set i8:$acc, (load tglobaladdr:$abs))]>;

@@ -101,6 +101,8 @@ public:
       return TextSection;
     if (Kind.isData())
       return DataSection;
+    if (Kind.isBSS())
+      return BSSSection;
 
     // FIXME
     llvm_unreachable("couldn't SelectSectionForGlobal");
