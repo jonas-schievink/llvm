@@ -102,7 +102,7 @@ Mos6502TargetLowering::Mos6502TargetLowering(const TargetMachine &TM,
 
   setStackPointerRegisterToSaveRestore(Mos6502::SP);
 
-  //setOperationAction(ISD::GlobalAddress, MVT::i16, Custom);
+  setOperationAction(ISD::GlobalAddress, MVT::i16, Custom);
 
 /*
   setOperationAction(ISD::BR_CC, MVT::i64, Custom);
@@ -512,8 +512,15 @@ const char *Mos6502TargetLowering::getTargetNodeName(unsigned Opcode) const {
   return nullptr;
 }
 
+void Mos6502TargetLowering::ReplaceNodeResults(SDNode *N,
+                        SmallVectorImpl<SDValue> &Results,
+                        SelectionDAG &DAG) const {
+  // Do nothing and pray
+}
+
 SDValue Mos6502TargetLowering::LowerGlobalAddress(SDValue Op,
                                                   SelectionDAG &DAG) const {
+  // Build a `tglobaladdr` and put it behind a custom Wrapper node
   SDLoc DL(Op);
   const GlobalValue *GV = cast<GlobalAddressSDNode>(Op)->getGlobal();
   SDValue GA = DAG.getTargetGlobalAddress(GV, DL, MVT::i16);

@@ -22,6 +22,12 @@ def mem : Operand<iPTR>;
 
 def jmptarget : Operand<OtherVT>;
 
+
+
+// load 64-bit global addr into register
+//def : Pat<(Wrapper tglobaladdr:$in), (LD_imm64 tglobaladdr:$in)>;
+
+
 //===----------------------------------------------------------------------===//
 // Abstract instruction classes and encoding
 //===----------------------------------------------------------------------===//

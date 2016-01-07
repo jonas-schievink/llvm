@@ -28,6 +28,8 @@ enum NodeType : unsigned {
   CALL,
   SELECT_CC,
   BR_CC,
+  // TODO: Understand exactly what this does. It seems to be emitted whenever
+  // we're loading from a globaladdr.
   Wrapper
 };
 }
@@ -41,6 +43,10 @@ public:
 
   // This method returns the name of a target specific DAG node.
   const char *getTargetNodeName(unsigned Opcode) const override;
+
+  void ReplaceNodeResults(SDNode *N,
+                          SmallVectorImpl<SDValue> &Results,
+                          SelectionDAG &DAG) const override;
 
 /*
   MachineBasicBlock *
